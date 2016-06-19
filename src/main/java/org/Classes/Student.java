@@ -18,7 +18,7 @@ public class Student {
 //private String name="";
 
 
-    //@Benchmark
+    @Benchmark
     public void testDir_SetterA() {
 
         A a = new A();
@@ -26,13 +26,14 @@ public class Student {
 
     }
 
-   // @Benchmark
+    @Benchmark
     public void testDir_GetterA(){
         A a = new A();
         a.getNameA();
     }
 
-    @Benchmark
+
+   // @Benchmark
     public void testReflection_GetterA() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         A a = new A();
         Class c = a.getClass();
@@ -40,7 +41,7 @@ public class Student {
         m.invoke(a);
     }
 
-    @Benchmark
+   // @Benchmark
     public void testReflectionCGLIB_GetterA() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         A a = new A();
         FastClass c = FastClass.create(A.class);
@@ -48,39 +49,34 @@ public class Student {
         fastMethod.invoke(a, new Object[]{});
     }
 
-  //  @Benchmark
-    public void testReflection_SetterA() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+    @Benchmark
+    public void testReflection_SetterA() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException, ClassNotFoundException, InstantiationException {
 
-        A a = new A();
-        Class c = a.getClass();
-        Class[] paramTypes = new Class[] {String.class};
-        Method m = c.getMethod("setNameA", paramTypes);
-        m.invoke(a, "str");
-
+        Class c = Class.forName("org.Classes.A");
+        Method method = c.getMethod("setNameA",new Class[]{String.class});
+        method.invoke(c.newInstance(),new Object[]{"str"});
     }
 
-  //  @Benchmark
+    @Benchmark
     public void   testReflectionCGLIB_SetterA() throws NoSuchMethodException, InvocationTargetException {
-
-        A a1 = new A();
         FastClass fastClass = FastClass.create(A.class);
-        FastMethod fastMethod = fastClass.getMethod(A.class.getMethod("setNameA", String.class));
-        fastMethod.invoke(a1, new Object[]{"str"});
+        FastMethod fastMethod = fastClass.getMethod("setNameA",new Class[]{String.class});
+        fastMethod.invoke(fastClass.newInstance(),new Object[]{"str"});
     }
 
-  //   @Benchmark
+     @Benchmark
     public void testDir_CreateInstA(){
 
         A z = new A();
     }
 
- //   @Benchmark
+    @Benchmark
     public void testDir_CreateInstZ(){
 
         Z z = new Z();
     }
 
-   // @Benchmark
+    @Benchmark
     public void testReflection_CreateInstA() throws ClassNotFoundException, IllegalAccessException, InstantiationException {
         Class c = null;
             c = Class.forName("org.Classes.A");
@@ -88,7 +84,7 @@ public class Student {
             A a = (A) obj;
     }
 
- //   @Benchmark
+    @Benchmark
     public void testReflection_CreateInstZ() throws ClassNotFoundException, IllegalAccessException, InstantiationException {
         Class c = null;
 
